@@ -1,6 +1,16 @@
 import bcrypt from 'bcrypt';
 import prisma from '@/prisma/client';
+import { NextResponse } from 'next/server';
 import { USER_REGEX, PASSWORD_REGEX } from '../../login/regex';
+
+export async function GET() {
+    try {
+        const response = await prisma.user.findMany();
+        return NextResponse.json(response);
+    } catch (err: any) {
+        return new Response('Erreur...', { status: 400 });
+    }
+}
 
 export async function POST(request: Request) {
     const { username, password } = await request.json();

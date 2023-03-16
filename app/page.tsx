@@ -13,7 +13,7 @@ export default function Home() {
       <h1>Page d'accueil</h1>
       {session.status === "loading" ?
         <p>Chargement...</p> :
-        !session.data ? 
+        !session.data?.user ? 
           <Register /> :
           <Link href={'/dashboard'}>Dashboard</Link>}
     </main>

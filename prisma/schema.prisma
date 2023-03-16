@@ -11,13 +11,48 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
+  id       Int     @id @default(autoincrement())
+  username String  @unique
   password String
-  role     Role   @default(USER)
+  role     Role    @default(USER)
+  location String?
+  game     Game?   @relation(fields: [game_id], references: [id])
+  game_id  Int?
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+model Game {
+  id    Int    @id @default(autoincrement())
+  areas Area[]
+  users User[]
+}
+
+model Area {
+  id         Int    @id @default(autoincrement())
+  coordinate String
+  biome      Biome
+  game       Game   @relation(fields: [game_id], references: [id])
+  game_id    Int
+  cells      Cell[]
+}
+
+enum Biome {
+  CITY
+  FOREST
+  MOUNTAIN
+  DESERT
+}
+
+model Cell {
+  id      Int     @id @default(autoincrement())
+  x       Int
+  y       Int
+  loot    Json?
+  zombie  Json?
+  area    Area    @relation(fields: [area_id], references: [id])
+  area_id Int
 }
