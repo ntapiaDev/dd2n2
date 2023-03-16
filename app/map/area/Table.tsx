@@ -1,27 +1,25 @@
-import axios from 'axios';
+'use client';
 import styles from './page.module.scss';
+import axios from 'axios';
+import { useQuery } from 'react-query';
 import Row from "./Row";
 
-export default async function Table() {
-  let size = 9;
-  // let table = [];
-  // for (let i = 0; i < size * size; i++) {
-  //   let zombie = Math.random() > 0.95 ? {
-  //     attack: Math.floor(Math.random() * 10),
-  //     defense: Math.floor(Math.random() * 10)
-  //   } : null;
-  //   let cell = {
-  //     id: i,
-  //     zombie
-  //   }
-  //   table.push(cell);
-  // }
+const getArea = async () => {
   const response = await axios.get('http://localhost:3000/api/area');
-  const table = response.data[0].cells;
+  return response.data[0];
+}
+
+export default function Table() {
+  const { data, error, isLoading } = useQuery({ queryFn: getArea, queryKey: ['area'] });
+  if (error) return <p>Échec du chargement!</p>;
+  if (isLoading) return <p>Chargement de la zone...</p>;
+
+  const table = data.cells;
 
   const rows = [];
+  const size = 9;
   for (let i = 0; i < table.length; i += size) {
-    rows.push(<Row key={i} values={table.slice(i, i + size)} />);
+    rows.push(<Row key={i} row={table.slice(i, i + size)} />);
   }
 
   return (

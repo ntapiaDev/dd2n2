@@ -16,6 +16,8 @@ model User {
   password String
   role     Role    @default(USER)
   location String?
+  x        Int?
+  y        Int?
   game     Game?   @relation(fields: [game_id], references: [id])
   game_id  Int?
 }
@@ -48,11 +50,11 @@ enum Biome {
 }
 
 model Cell {
-  id      Int     @id @default(autoincrement())
+  id      Int   @id @default(autoincrement())
   x       Int
   y       Int
   loot    Json?
   zombie  Json?
-  area    Area    @relation(fields: [area_id], references: [id])
+  area    Area  @relation(fields: [area_id], references: [id])
   area_id Int
 }

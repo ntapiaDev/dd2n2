@@ -1,13 +1,14 @@
 import styles from './page.module.scss';
 import Zombie from './Zombie';
+import { CellType } from '@/app/types/Cell';
 
-export default function Cell({ value }) {
+export default function Cell({ cell }: { cell: CellType }) {
 
   return (
     <td className={styles.td}>{
-      value.x === 5 && value.y === 5 ? 'P' :
-      value.loot ? 'L' :
-      value.zombie ? <Zombie /> : ''
+      cell.x === 5 && cell.y === 5 ? 'P' :
+      cell.loot ? 'L' :
+      cell.zombie ? <Zombie /> : ''
     }</td>
   )
 }
