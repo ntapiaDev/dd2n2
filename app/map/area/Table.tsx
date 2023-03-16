@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import Row from "./Row";
 
 const getArea = async () => {
-  const response = await axios.get('http://localhost:3000/api/area');
+  const response = await axios.get('/api/area');
   return response.data[0];
 }
 
