@@ -4,12 +4,12 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../pages/api/auth/[...nextauth]";
 import { CellType, LootType, ZombieType } from '@/app/types/Cell';
 
-enum Loots { 'ALTAR', 'CHEST', 'GARDEN', 'RESOURCE', 'WEAPON' };
+enum Loots { 'ALTAR', 'CHEST', 'FOOD', 'GARDEN', 'RESOURCE', 'WEAPON' };
 enum Rarities { 'COMMUN', 'INCOMMUN', 'RARE', 'EPIC', 'LEGENDARY' };
 enum Biome { 'CITY', 'FOREST', 'MOUNTAIN', 'DESERT' };
 
 // Modif en fonction du biome
-const getLoot = (biome: Biome, level: number): LootType => {
+const getLoot = (biome: Biome, level: number): LootType| undefined => {
     const random = Math.random();
     const getRarity = () => Rarities[Math.floor(Math.random() * (level + 1))];
     if (random < 0.02) return { loot: Loots[0], rarity: getRarity() };
@@ -20,7 +20,7 @@ const getLoot = (biome: Biome, level: number): LootType => {
     return undefined;
 };
 // Puissance en fonction du level
-const getZombie = (level: number): ZombieType => {
+const getZombie = (level: number): ZombieType| undefined => {
     const random = Math.random();
     if (random < 0.10) return { attack: 5, defense: 8 };
     return undefined;

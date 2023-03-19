@@ -1,5 +1,5 @@
-export type LootType = { loot: string, rarity: string } | undefined;
-export type ZombieType = { attack: number, defense: number } | undefined;
+export type LootType = { loot: string, rarity: string };
+export type ZombieType = { attack: number, defense: number };
 
 export type CellType = {
     area_id: number,

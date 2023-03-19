@@ -5,8 +5,8 @@ import { useQuery } from 'react-query';
 import Row from "./Row";
 
 const getArea = async () => {
-  const response = await axios.get('/api/area');
-  return response.data[0];
+  const response = await axios.get('/api/area/E5');
+  return response.data;
 }
 
 export default function Table() {
