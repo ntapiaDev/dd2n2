@@ -6,14 +6,14 @@ import Link from 'next/link';
 import Register from './login/Register';
 
 export default function Home() {
-  const session = useSession();
+  const { data: session, status } = useSession();
   
   return (
     <main className={styles.main}>
       <h1>Page d'accueil</h1>
-      {session.status === "loading" ?
+      {status === "loading" ?
         <p>Chargement...</p> :
-        !session.data?.user ? 
+        !session?.user ? 
           <Register /> :
           <Link href={'/dashboard'}>Dashboard</Link>}
     </main>

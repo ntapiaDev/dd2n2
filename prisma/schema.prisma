@@ -11,15 +11,13 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  username String  @unique
+  id       Int    @id @default(autoincrement())
+  username String @unique
   password String
-  role     Role    @default(USER)
-  location String?
-  x        Int?
-  y        Int?
-  game     Game?   @relation(fields: [game_id], references: [id])
+  role     Role   @default(USER)
+  game     Game?  @relation(fields: [game_id], references: [id])
   game_id  Int?
+  area     Area?
 }
 
 enum Role {
@@ -29,17 +27,22 @@ enum Role {
 
 model Game {
   id    Int    @id @default(autoincrement())
+  day   Int    @default(1)
   areas Area[]
   users User[]
 }
 
 model Area {
-  id         Int    @id @default(autoincrement())
-  coordinate String
-  biome      Biome
-  game       Game   @relation(fields: [game_id], references: [id])
-  game_id    Int
-  cells      Cell[]
+  id      Int    @id @default(autoincrement())
+  x       Int
+  y       Int
+  biome   Biome
+  level   Int
+  game    Game   @relation(fields: [game_id], references: [id])
+  game_id Int
+  user    User?  @relation(fields: [user_id], references: [id])
+  user_id Int?   @unique
+  cells   Cell[]
 }
 
 enum Biome {
