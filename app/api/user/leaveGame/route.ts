@@ -1,11 +1,11 @@
 import prisma from '@/prisma/client';
+import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../pages/api/auth/[...nextauth]";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export async function PATCH() {
-
     const session = await getServerSession(authOptions);
-    if (!session) return new Response('Vous devez être identifié pour accéder à cette page!');
+    if (!session?.user) return new Response('Vous devez être identifié pour accéder à cette page!', { status: 401 });
 
     try {
         const response = await prisma.user.update({
@@ -16,9 +16,8 @@ export async function PATCH() {
                 game_id: null
             }
         })
+        return NextResponse.json(response);
     } catch (err: any) {
-        console.log(err.message);
-
+        return new Response(err.message, { status: 400 });
     }
-    return new Response('Vous avez quitté la partie');
 }

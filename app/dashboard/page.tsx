@@ -1,5 +1,5 @@
-import Logout from "../login/Logout";
 import Games from "./Games";
+import Logout from "../login/Logout";
 
 export default function Dashboard() {
   return (

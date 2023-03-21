@@ -1,8 +1,8 @@
 'use client';
+
 import axios from "axios";
 import { useQuery } from "react-query";
 import { GameType } from "../types/Game";
-
 import AddGame from "./AddGame";
 import Game from "./Game";
 

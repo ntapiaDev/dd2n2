@@ -1,9 +1,9 @@
-export enum Biomes { CITY = 'CITY', FOREST = 'FOREST', MOUNTAIN = 'MOUNTAIN', DESERT = 'DESERT' };
+export enum Biomes { CITY = 'CITY', DESERT = 'DESERT', FOREST = 'FOREST', LAKE = 'LAKE', MOUNTAIN = 'MOUNTAIN' };
 
 export type AreaType = {
     game_id: number,
     x: number,
     y: number,
-    biome: Biomes,
+    biome: keyof typeof Biomes,
     level: number
 };

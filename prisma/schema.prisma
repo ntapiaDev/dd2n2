@@ -38,7 +38,7 @@ model Area {
   y       Int
   biome   Biome
   level   Int
-  game    Game   @relation(fields: [game_id], references: [id])
+  game    Game   @relation(fields: [game_id], references: [id], onDelete: Cascade)
   game_id Int
   user    User?  @relation(fields: [user_id], references: [id])
   user_id Int?   @unique
@@ -47,9 +47,10 @@ model Area {
 
 enum Biome {
   CITY
-  FOREST
-  MOUNTAIN
   DESERT
+  FOREST
+  LAKE
+  MOUNTAIN
 }
 
 model Cell {
@@ -58,6 +59,6 @@ model Cell {
   y       Int
   loot    Json?
   zombie  Json?
-  area    Area  @relation(fields: [area_id], references: [id])
+  area    Area  @relation(fields: [area_id], references: [id], onDelete: Cascade)
   area_id Int
 }

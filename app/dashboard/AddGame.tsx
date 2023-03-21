@@ -1,29 +1,44 @@
+import { useState } from 'react';
 import { useMutation, useQueryClient } from "react-query";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
 export default function AddGame() {
     const queryClient = useQueryClient();
-    let toastPostID: string;
+
+    let game_id: number;
+    let toastId: string;
 
     const { mutate } = useMutation(
         async () => await axios.post('api/game/', {}), {
             onError: (error) => {
                 if (error instanceof AxiosError) {
-                    toast.error(error?.response?.data.message, { id: toastPostID })
+                    toast.error(error.response?.data.message, { id: toastId })
                 }
             },
-            onSuccess: () => {
-                toast.success("Partie ajoutée 🔥", { id: toastPostID });
+            onSuccess: async (data) => {
+                game_id = data.data.id;
+                await axios.post('api/area', {
+                    game_id
+                })
+                toast.success("Partie créée 🔥", { id: toastId });
                 // CF gestion des états pour ajouter directement en cache
                 queryClient.invalidateQueries(["games"]);
+            },
+            onSettled: async (data, error) => {
+                if (error) {
+                    if (error instanceof AxiosError) {
+                        toast.error(error.message, { id: toastId })
+                    }
+                    await axios.delete(`api/game/${game_id}`);
+                }
             }
         }
     )
 
     const addGame = async (e: React.FormEvent) => {
         e.preventDefault();
-        toastPostID = toast.loading("Creating your post", { id: toastPostID });
+        toastId = toast.loading("Création d'une partie...", { id: toastId });
         mutate();
     }
 

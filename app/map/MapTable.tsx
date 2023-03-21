@@ -1,4 +1,5 @@
 'use client';
+
 import styles from './page.module.scss';
 import axios from 'axios';
 import { useQuery } from 'react-query';
@@ -12,7 +13,7 @@ const getMap = async () => {
 export default function Table() {
   const { data, error, isLoading } = useQuery({ queryFn: getMap, queryKey: ['map'] });
   if (error) return <p>Échec du chargement!</p>;
-  if (isLoading) return <p>Chargement de la zone...</p>;
+  if (isLoading) return <p>Chargement de la carte...</p>;
 
   const rows = [];
   const size = 9;
