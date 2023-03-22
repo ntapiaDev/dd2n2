@@ -15,15 +15,15 @@ export default function Cell({ area }: { area: AreaType }) {
       {/* <div style={{
         width: '100%',
         height: '100%',
-        border: '3px double',
+        border: '1px solid',
         borderColor:
-          area.level === 0 ? 'white' :
+          area.level === 0 ? 'grey' :
           area.level === 1 ? 'blue' :
           area.level === 2 ? 'green' :
           area.level === 3 ? 'yellow' :
           area.level === 4 ? 'red' : 'purple'
       }}> */}
-        <Link href={`map/area/${area.x}/${area.y}`}>{
+        <Link href={`map/area?x=${area.x}&y=${area.y}`}>{
         area.biome.slice(0, 1)
         // area.level
       }</Link>

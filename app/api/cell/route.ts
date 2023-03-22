@@ -27,7 +27,7 @@ const getZombie = (level: number): ZombieType| undefined => {
 };
 
 export async function POST(request: Request) {
-    const area = await request.json();    
+    const area = await request.json();
 
     // const session = await getServerSession(authOptions);
     // if (!session) return new Response('Vous devez être identifié pour accéder à cette page!');

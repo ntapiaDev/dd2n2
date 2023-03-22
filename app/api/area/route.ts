@@ -72,15 +72,22 @@ export async function POST(request: Request) {
     const keys = Object.keys(Biomes);
     let biome = keys[Math.floor(Math.random() * keys.length)] as keyof typeof Biomes;
 
+    const repeatX = (x: number, y: number) => {
+        return areas.find(a => a.y === y && a.x === x - 3)?.biome === areas.find(a => a.y === y && a.x === x - 2)?.biome && areas.find(a => a.y === y && a.x === x - 1)?.biome
+    }
+    const repeatY = (x: number, y: number) => {
+        return areas.find(a => a.y === y - 3 && a.x === x)?.biome === areas.find(a => a.y === y - 2 && a.x === x)?.biome && areas.find(a => a.y === y - 1 && a.x === x)?.biome
+    }
+
     for (let i = 1; i < size + 1; i++) {
         for (let j = 1; j < size + 1; j++) {
             if (j === encampment.x && i === encampment.y) biome = 'CITY';
             else {
                 if (i > 1) biome = areas.find(a => a.y === i - 1 && a.x === j)?.biome ?? 'CITY';
                 if (j > 1 && areas.find(a => a.y === i && a.x === j - 1)?.biome === biome) {                 
-                    if (Math.random() > 0.8) biome = keys[Math.floor(Math.random() * keys.length)] as keyof typeof Biomes;
+                    if (j > 3 && repeatX(j, i)) biome = keys[Math.floor(Math.random() * keys.length)] as keyof typeof Biomes;
                 } else {
-                    if (Math.random() > 0.6) biome = keys[Math.floor(Math.random() * keys.length)] as keyof typeof Biomes;
+                    if (i > 3 && repeatY(j, i)) biome = keys[Math.floor(Math.random() * keys.length)] as keyof typeof Biomes;
                 }
             }
             const level = Math.ceil((getDistance(j, i, encampment) / 2) + (-1 + Math.random() * 2));

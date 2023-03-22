@@ -4,6 +4,9 @@ import { NextResponse } from 'next/server';
 export async function GET() {
     try {
         const response = await prisma.game.findMany({
+            orderBy: {
+                id: 'asc'
+            },
             include: {
                 users: true
             }
