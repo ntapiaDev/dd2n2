@@ -20,7 +20,7 @@ export default async function Area({ searchParams }: { searchParams: { x: string
   const response = await axios.get(`${process.env.BASE_URL}/api/area?x=${x}&y=${y}&game_id=${session.user.game_id}`);
   const area: AreaType = await response.data;
 
-  if (!area.cells.length) {
+  if (!area.cells?.length) {
     const cells = await axios.post('http://localhost:3000/api/cell/', {
       id: area.id,
       biome: area.biome,
