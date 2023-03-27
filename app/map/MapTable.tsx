@@ -1,18 +1,19 @@
 'use client';
 
 import styles from './page.module.scss';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
+import { AreaType } from '@/app/types/Area';
 import MapRow from "./MapRow";
 
 const getMap = async () => {
-  const response = await axios.get('/api/area/');
+  const response = await axios.get(`/api/area`);
   return response.data;
 }
 
-export default function Table() {
-  const { data, error, isLoading } = useQuery({ queryFn: getMap, queryKey: ['map'] });
-  if (error) return <p>Échec du chargement!</p>;
+export default function Table({ map }: { map: AreaType[] }) {
+  const { data, error, isLoading } = useQuery('map', getMap, { initialData: map });
+  if (error && error instanceof AxiosError) return <p>{error.response?.data}</p>;
   if (isLoading) return <p>Chargement de la carte...</p>;
 
   const rows = [];

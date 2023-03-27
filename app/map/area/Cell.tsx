@@ -5,7 +5,6 @@ import Player from './Player';
 import Zombie from './Zombie';
 
 export default function Cell({ cell }: { cell: CellType }) {
-
   return (
     <td className={styles.td}>{
       cell.x === 5 && cell.y === 5 ? <Player /> :

@@ -5,7 +5,7 @@ import { LootType } from '@/app/types/Cell';
 export default function Loot({ loot, rarity }: LootType) {
   return (
     <div className={styles.cell}>
-      <Image className={styles.image} src={`/img/${loot}.png`} alt={`${loot} icon by Freepik`} width={512} height={512} />
+      <Image className={styles.image} src={`/img/${loot.toLowerCase()}.png`} alt={`${loot.toLowerCase()} icon by Freepik`} width={512} height={512} />
     </div>
   )
 }

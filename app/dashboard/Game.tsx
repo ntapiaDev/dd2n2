@@ -5,8 +5,7 @@ import JoinGame from "./JoinGame";
 import LeaveGame from "./LeaveGame";
 
 export default function Game({ id, day, users }: GameType) {
-    const { data: session } = useSession()
-
+    const { data: session } = useSession();
     return (
         <div>
             <h4>Partie {id}</h4>

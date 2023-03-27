@@ -56,5 +56,5 @@ export async function POST(request: Request) {
     const response = await prisma.cell.createMany({
         data: cells
     })
-    return NextResponse.json(response);
+    return NextResponse.json(cells);
 }
