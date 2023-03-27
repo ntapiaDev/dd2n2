@@ -12,6 +12,8 @@ const getArea = async (x: string, y: string) => {
 }
 
 export default function Table({ x, y, area }: { x: string, y: string, area: AreaType }) {
+  console.log(x, y);
+  
   const { data, error, isLoading } = useQuery(`area-${area.id}`, () => getArea(x, y), { initialData: area });
   if (error && error instanceof AxiosError) return <p>{error.response?.data}</p>;
   if (isLoading) return <p>Chargement de la zone...</p>;

@@ -9,12 +9,12 @@ export default async function Area({ searchParams }: { searchParams: { x: string
   const { x } = searchParams;
   const { y } = searchParams;
   
-  if (!x || !y || parseInt(x) < 1 || parseInt(x) > 9 || parseInt(y) < 1 || parseInt(y) > 9) return (
-    <main>
-      <h1>Zone</h1>
-      <p>Cette zone est invalide.</p>
-    </main>
-  )
+  // if (!x || !y || parseInt(x) < 1 || parseInt(x) > 9 || parseInt(y) < 1 || parseInt(y) > 9) return (
+  //   <main>
+  //     <h1>Zone</h1>
+  //     <p>Cette zone est invalide.</p>
+  //   </main>
+  // )
 
   const session = await getServerSession(authOptions);
   const response = await axios.get(`${process.env.BASE_URL}/api/area?x=${x}&y=${y}&game_id=${session.user.game_id}`);
