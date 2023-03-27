@@ -21,7 +21,7 @@ export default async function Area({ searchParams }: { searchParams: { x: string
   const area: AreaType = await response.data;
 
   if (!area.cells?.length) {
-    const cells = await axios.post('http://localhost:3000/api/cell/', {
+    const cells = await axios.post(`${process.env.BASE_URL}/api/cell/`, {
       id: area.id,
       biome: area.biome,
       level: area.level
