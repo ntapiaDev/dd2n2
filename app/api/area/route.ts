@@ -6,18 +6,12 @@ import { AreaType, Biomes } from '@/app/types/Area';
 import { getDistance } from '@/app/utils/tools';
 
 export async function GET(request: Request) {
-    const url = new URL(request.url);
-    let game_id = url.searchParams.get('game_id');
-    let id: string;
-    
-    if (!game_id) {
-        const session = await getServerSession(authOptions);
-        if (!session?.user) return new Response('Vous devez être identifié pour accéder à cette page!', { status: 401 });
-        const user = session.user;
-        if (!user.game_id) return new Response('Vous devez rejoindre une partie pour accéder à cette page!', { status: 401 });
-        id = user.game_id;
-    } else id = game_id;
+    const session = await getServerSession(authOptions);
+    if (!session?.user) return new Response('Vous devez être identifié pour accéder à cette page!', { status: 401 });
+    const user = session.user;
+    if (!user.game_id) return new Response('Vous devez rejoindre une partie pour accéder à cette page!', { status: 401 });
 
+    const url = new URL(request.url);
     const x = url.searchParams.get('x');
     const y = url.searchParams.get('y');
 
@@ -25,7 +19,7 @@ export async function GET(request: Request) {
         try {
             const response = await prisma.area.findFirst({
                 where: {
-                    game_id: parseInt(id),
+                    game_id: user.game_id,
                     x: parseInt(x),
                     y: parseInt(y)
                 },
@@ -51,7 +45,7 @@ export async function GET(request: Request) {
     try {
         const response = await prisma.area.findMany({
             where: {
-                game_id: parseInt(id)
+                game_id: user.game_id
             },
             orderBy: [
                 {

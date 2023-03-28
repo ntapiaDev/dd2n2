@@ -11,8 +11,8 @@ const getGames = async () => {
     return response.data;
 }
 
-export default function Games({ games }: { games: GameType[] }) {
-    const { data, error, isLoading } = useQuery<GameType[]>('games', getGames, { initialData: games });
+export default function Games() {
+    const { data, error, isLoading } = useQuery<GameType[]>('games', getGames);
     if (error) return <p>Échec du chargement!</p>;
     if (isLoading) return <p>Chargement de la liste des parties...</p>;
     return (

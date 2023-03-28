@@ -3,7 +3,6 @@
 import styles from './page.module.scss';
 import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
-import { AreaType } from '@/app/types/Area';
 import MapRow from "./MapRow";
 
 const getMap = async () => {
@@ -11,8 +10,8 @@ const getMap = async () => {
   return response.data;
 }
 
-export default function Table({ map }: { map: AreaType[] }) {
-  const { data, error, isLoading } = useQuery('map', getMap, { initialData: map });
+export default function Table() {
+  const { data, error, isLoading } = useQuery('map', getMap);
   if (error && error instanceof AxiosError) return <p>{error.response?.data}</p>;
   if (isLoading) return <p>Chargement de la carte...</p>;
 
