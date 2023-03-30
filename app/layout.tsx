@@ -1,7 +1,6 @@
 import './globals.scss';
 import { Session } from 'next-auth';
-import ClientSessionProvider from './website/ClientSessionProvider';
-import QueryWrapper from './website/QueryWrapper';
+import ClientProviders from './website/ClientProviders';
 import Nav from './website/Nav';
 
 export const metadata = {
@@ -13,12 +12,10 @@ export default function RootLayout({ children, session }: { children: React.Reac
   return (
     <html lang="fr">
       <body>
-        <ClientSessionProvider session={session}>
-          <QueryWrapper> {/* Toaster */}
-            <Nav />
-            {children}
-          </QueryWrapper>
-        </ClientSessionProvider>
+        <ClientProviders session={session}> {/* Toaster */}
+          <Nav />
+          {children}
+        </ClientProviders>
       </body>
     </html>
   )

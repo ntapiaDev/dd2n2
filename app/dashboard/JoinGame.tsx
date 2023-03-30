@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
-import { useMutation, useQueryClient } from "react-query";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const getMap = async () => {
@@ -10,7 +11,7 @@ const getMap = async () => {
 export default function JoinGame({ id }: { id: number }) {
     const queryClient = useQueryClient();
 
-    let toastId: string;
+    const [toastId, setToastId] = useState('');
 
     const { mutate } = useMutation(
         async (game_id: number) => await axios.patch('/api/user/joinGame/', { game_id }), {
@@ -21,14 +22,14 @@ export default function JoinGame({ id }: { id: number }) {
             },
             onSuccess: (data) => {
                 toast.success('Vous avez rejoint la partie!', { id: toastId });
-                queryClient.invalidateQueries('games');
-                queryClient.prefetchQuery('map', getMap);
+                queryClient.invalidateQueries({ queryKey: ['games'] });
+                queryClient.prefetchQuery({ queryKey: ['map'], queryFn: getMap });
             }
         }
     )
     
     const joinGame = () => {
-        toastId = toast.loading('Merci de patienter...', { id: toastId });
+        setToastId(toast.loading('Merci de patienter...'));
         mutate(id);
     }
 

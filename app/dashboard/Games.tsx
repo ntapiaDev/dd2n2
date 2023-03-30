@@ -1,7 +1,7 @@
 'use client';
 
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { GameType } from "../types/Game";
 import AddGame from "./AddGame";
 import Game from "./Game";
@@ -12,7 +12,7 @@ const getGames = async () => {
 }
 
 export default function Games() {
-    const { data, error, isLoading } = useQuery<GameType[]>('games', getGames);
+    const { data, error, isLoading } = useQuery<GameType[]>({ queryKey: ['games'], queryFn: getGames });
     if (error) return <p>Échec du chargement!</p>;
     if (isLoading) return <p>Chargement de la liste des parties...</p>;
     return (

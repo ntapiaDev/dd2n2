@@ -1,11 +1,12 @@
 import axios, { AxiosError } from "axios";
-import { useMutation, useQueryClient } from "react-query";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 export default function DeleteGame({ id }: { id: number }) {
     const queryClient = useQueryClient();
 
-    let toastId: string;
+    const [toastId, setToastId] = useState('');
 
     const { mutate } = useMutation(
         async (id: number) => await axios.delete(`/api/game/${id}`), {
@@ -16,13 +17,13 @@ export default function DeleteGame({ id }: { id: number }) {
             },
             onSuccess: (data) => {
                 toast.success('La partie a bien été supprimée!', { id: toastId });
-                queryClient.invalidateQueries(['games']);
+                queryClient.invalidateQueries({ queryKey: ['games'] });
             }
         }
     )
 
     const deleteGame = () => {
-        toastId = toast.loading('Suppression en cours...', { id: toastId });
+        setToastId(toast.loading('Suppression en cours...'));
         mutate(id);
     }
 

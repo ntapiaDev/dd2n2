@@ -1,12 +1,13 @@
 import axios, { AxiosError } from "axios";
-import { useMutation, useQueryClient } from "react-query";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 export default function AddGame() {
     const queryClient = useQueryClient();
 
+    const [toastId, setToastId] = useState('');
     let game_id: number;
-    let toastId: string;
 
     const { mutate } = useMutation(
         async () => await axios.post('api/game/', {}), {
@@ -21,7 +22,7 @@ export default function AddGame() {
                     game_id
                 });
                 toast.success("Partie créée 🔥", { id: toastId });
-                queryClient.invalidateQueries('games');
+                queryClient.invalidateQueries({ queryKey: ['games'] });
             },
             onSettled: async (data, error) => {
                 if (error) {
@@ -36,7 +37,7 @@ export default function AddGame() {
 
     const addGame = async (e: React.FormEvent) => {
         e.preventDefault();
-        toastId = toast.loading("Création d'une partie...", { id: toastId });
+        setToastId(toast.loading("Création d'une partie..."));
         mutate();
     }
 

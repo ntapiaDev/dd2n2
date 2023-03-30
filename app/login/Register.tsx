@@ -2,7 +2,7 @@
 
 import styles from './Register.module.css';
 import { useState } from "react";
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
@@ -13,9 +13,9 @@ export default function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeat, setRepeat] = useState('');
-
+    const [toastId, setToastId] = useState('');
+    
     let disabled = !USER_REGEX.test(username) || !PASSWORD_REGEX.test(password) || (password !== repeat);
-    let toastId: string;
 
     const { mutate } = useMutation(
         async ({ username, password }: { username: string, password: string }) => await axios.post('api/user/', { username, password }), {
@@ -23,7 +23,6 @@ export default function Register() {
                 if (error instanceof AxiosError) toast.error(error.response?.data, { id: toastId });
             },
             onSuccess: (data) => {
-                // toast.success(data.data, { id: toastId });
                 signIn();
             }
         }
@@ -31,7 +30,7 @@ export default function Register() {
 
     const addUser = async (e: React.FormEvent) => {
         e.preventDefault();
-        toastId = toast.loading('Enregistrement en cours...');
+        setToastId(toast.loading('Enregistrement en cours...'));
         mutate({ username, password });
     }
 

@@ -5,7 +5,7 @@ import axios, { AxiosError } from 'axios';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Row from "./Row";
 
 const getArea = async (x: string, y: string) => {
@@ -21,7 +21,7 @@ export default function Table() {
 
   const queryClient = useQueryClient();
   const [generated, setGenerated] = useState(false);
-  let toastId: string;
+  const [toastId, setToastId] = useState('');
 
   const { mutate } = useMutation(
     async (data: {id: number, biome: String, level: number}) => await axios.post('/api/cell/', {
@@ -36,18 +36,18 @@ export default function Table() {
       },
       onSuccess: async (data) => {
         toast.success("Zone créée 🔥", { id: toastId });
-        queryClient.invalidateQueries(`area-${x}-${y}`);
+        queryClient.invalidateQueries({ queryKey: [`area-${x}-${y}`] });
       },
     }
   )
 
-  const { data, error, isLoading } = useQuery(`area-${x}-${y}`, () => getArea(x, y));
+  const { data, error, isLoading } = useQuery({ queryKey: [`area-${x}-${y}`], queryFn: () => getArea(x, y) });
   if (error && error instanceof AxiosError) return <p>{error.response?.data}</p>;
   if (isLoading) return <p>Chargement de la zone...</p>;
 
   if (!data.cells.length && !generated) {
     setGenerated(true);
-    toastId = toast.loading("Préparation de la partie...");
+    setToastId(toast.loading("Préparation de la partie..."));
     mutate(data);
   } 
 

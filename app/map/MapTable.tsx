@@ -2,7 +2,7 @@
 
 import styles from './page.module.scss';
 import axios, { AxiosError } from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import MapRow from "./MapRow";
 
 const getMap = async () => {
@@ -11,7 +11,7 @@ const getMap = async () => {
 }
 
 export default function Table() {
-  const { data, error, isLoading } = useQuery('map', getMap);
+  const { data, error, isLoading } = useQuery({ queryKey: ['map'], queryFn: getMap });
   if (error && error instanceof AxiosError) return <p>{error.response?.data}</p>;
   if (isLoading) return <p>Chargement de la carte...</p>;
 
