@@ -2,8 +2,8 @@
 
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { GameType } from "../types/Game";
-import { UserType } from "../types/User";
+import { GameType } from "@/app/types/Game";
+import { UserType } from "@/app/types/User";
 import AddGame from "./AddGame";
 import Game from "./Game";
 

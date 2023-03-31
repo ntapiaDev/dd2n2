@@ -1,5 +1,5 @@
-import { GameType } from "../types/Game";
-import { UserType } from "../types/User";
+import { GameType } from "@/app/types/Game";
+import { UserType } from "@/app/types/User";
 import DeleteGame from "./DeleteGame";
 import JoinGame from "./JoinGame";
 import LeaveGame from "./LeaveGame";

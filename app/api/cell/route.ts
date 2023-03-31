@@ -1,9 +1,7 @@
 import prisma from '@/prisma/client';
 import { NextResponse } from 'next/server';
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { CellType, LootType, ZombieType } from '@/app/types/Cell';
 import { AreaType, Biomes } from '@/app/types/Area';
+import { CellType, LootType, ZombieType } from '@/app/types/Cell';
 
 enum Loots { 'ALTAR', 'CHEST', 'FOOD', 'GARDEN', 'RESOURCE', 'WEAPON' };
 enum Rarities { 'COMMUN', 'INCOMMUN', 'RARE', 'EPIC', 'LEGENDARY' };
@@ -19,6 +17,7 @@ const getLoot = (biome: keyof typeof Biomes, level: number): LootType| undefined
     else if (random < 0.10) return { loot: Loots[4], rarity: getRarity() };
     return undefined;
 };
+
 // Puissance en fonction du level
 const getZombie = (level: number): ZombieType| undefined => {
     const random = Math.random();
@@ -28,10 +27,6 @@ const getZombie = (level: number): ZombieType| undefined => {
 
 export async function POST(request: Request) {
     const areas: AreaType[] = await request.json();
-    
-    // const session = await getServerSession(authOptions);
-    // if (!session) return new Response('Vous devez être identifié pour accéder à cette page!');
-    // Check admin?
 
     const size = 9;
     const cells: Omit<CellType, 'id'>[] = [];
@@ -56,6 +51,7 @@ export async function POST(request: Request) {
             }
         }
     }
+    
     const response = await prisma.cell.createMany({
         data: cells
     })

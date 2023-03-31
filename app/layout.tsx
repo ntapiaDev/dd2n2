@@ -2,7 +2,7 @@ import './globals.scss';
 import { Session } from 'next-auth';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { UserType } from './types/User';
+import { UserType } from '@/app/types/User';
 import ClientProviders from './website/ClientProviders';
 import Nav from './website/Nav';
 

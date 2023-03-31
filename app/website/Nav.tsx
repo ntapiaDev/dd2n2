@@ -4,7 +4,7 @@ import styles from './Nav.module.scss';
 import { getSession } from "next-auth/react";
 import { useQuery } from '@tanstack/react-query';
 import Link from "next/link";
-import { UserType } from '../types/User';
+import { UserType } from '@/app/types/User';
 
 const getUser = async () => {
   const session = await getSession();

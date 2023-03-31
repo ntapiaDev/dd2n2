@@ -5,7 +5,7 @@ import { dehydrate, Hydrate } from '@tanstack/react-query';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import getQueryClient from "../website/getQueryClient";
-import { UserType } from "../types/User";
+import { UserType } from "@/app/types/User";
 import Games from "./Games";
 import Logout from "../login/Logout";
 

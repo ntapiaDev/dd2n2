@@ -2,8 +2,8 @@
 
 import styles from './page.module.scss';
 import axios, { AxiosError } from 'axios';
-import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 import Row from "./Row";
 
 const getArea = async (x: string, y: string) => {
