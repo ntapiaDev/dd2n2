@@ -10,7 +10,7 @@ export default function AddGame() {
     let game_id: number;
 
     const { mutate } = useMutation(
-        async () => await axios.post('api/game/', {}), {
+        async () => await axios.post('api/game', {}), {
             onError: (error) => {
                 if (error instanceof AxiosError) {
                     toast.error(error.response?.data.message, { id: toastId });
@@ -21,6 +21,10 @@ export default function AddGame() {
                 await axios.post('api/area', {
                     game_id
                 });
+                const areas = await axios.get(`api/area?game_id=${game_id}`);
+                await axios.post('api/cell', 
+                    areas.data
+                );
                 toast.success("Partie créée 🔥", { id: toastId });
                 queryClient.invalidateQueries({ queryKey: ['games'] });
             },
@@ -35,15 +39,12 @@ export default function AddGame() {
         }
     )
 
-    const addGame = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const addGame = async () => {
         setToastId(toast.loading("Création d'une partie..."));
         mutate();
     }
 
     return (
-        <form onSubmit={addGame}>
-            <button>Ajouter une partie</button>
-        </form>
+        <button onClick={addGame}>Ajouter une partie</button>
     )
 }

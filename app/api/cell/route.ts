@@ -1,15 +1,15 @@
 import prisma from '@/prisma/client';
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../pages/api/auth/[...nextauth]";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { CellType, LootType, ZombieType } from '@/app/types/Cell';
+import { AreaType, Biomes } from '@/app/types/Area';
 
 enum Loots { 'ALTAR', 'CHEST', 'FOOD', 'GARDEN', 'RESOURCE', 'WEAPON' };
 enum Rarities { 'COMMUN', 'INCOMMUN', 'RARE', 'EPIC', 'LEGENDARY' };
-enum Biome { 'CITY', 'FOREST', 'MOUNTAIN', 'DESERT' };
 
 // Modif en fonction du biome
-const getLoot = (biome: Biome, level: number): LootType| undefined => {
+const getLoot = (biome: keyof typeof Biomes, level: number): LootType| undefined => {
     const random = Math.random();
     const getRarity = () => Rarities[Math.floor(Math.random() * (level + 1))];
     if (random < 0.02) return { loot: Loots[0], rarity: getRarity() };
@@ -27,30 +27,33 @@ const getZombie = (level: number): ZombieType| undefined => {
 };
 
 export async function POST(request: Request) {
-    const area = await request.json();
-
+    const areas: AreaType[] = await request.json();
+    
     // const session = await getServerSession(authOptions);
     // if (!session) return new Response('Vous devez être identifié pour accéder à cette page!');
-    //Check admin?
+    // Check admin?
 
     const size = 9;
-    const cells: CellType[] = [];
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-            const cell: CellType = {
-                area_id: area.id,
-                x: j + 1,
-                y: i + 1,
-            };
-            if (cell.x != 5 || cell.y != 5) {
-                const loot = getLoot(area.biome, area.level);
-                if (loot) cell.loot = loot;
-                else {
-                    const zombie = getZombie(area.level);
-                    if (zombie) cell.zombie = zombie;
+    const cells: Omit<CellType, 'id'>[] = [];
+
+    for (let area of areas) {
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                const cell: Omit<CellType, 'id'> = {
+                    area_id: area.id,
+                    x: j + 1,
+                    y: i + 1,
+                };
+                if (cell.x != 5 || cell.y != 5) {
+                    const loot = getLoot(area.biome, area.level);
+                    if (loot) cell.loot = loot;
+                    else {
+                        const zombie = getZombie(area.level);
+                        if (zombie) cell.zombie = zombie;
+                    }
                 }
+                cells.push(cell);
             }
-            cells.push(cell);
         }
     }
     const response = await prisma.cell.createMany({

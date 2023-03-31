@@ -1,7 +1,9 @@
-import { User } from "./User"
+import { AreaType } from "./Area"
+import { UserType } from "./User"
 
 export type GameType = {
     id: number,
     day: number,
-    users: User[]
+    areas?: AreaType[],
+    users?: UserType[]
 }

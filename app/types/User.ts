@@ -1,7 +1,14 @@
+import { AreaType } from "./Area"
+import { GameType } from "./Game"
+
 export enum Role { USER = 'USER', ADMIN = 'ADMIN'};
 
-export type User = {
+export type UserType = {
     id: number,
     username: string,
-    role: Role
+    password: string,
+    role: keyof typeof Role,
+    game?: GameType,
+    game_id?: number,
+    area?: AreaType
 }

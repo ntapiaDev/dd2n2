@@ -9,7 +9,7 @@ export default function LeaveGame({ id }: { id: number }) {
     const [toastId, setToastId] = useState('');
 
     const { mutate } = useMutation(
-        async (game_id: number) => await axios.patch('/api/user/leaveGame/', { game_id }), {
+        async (game_id: number) => await axios.patch('/api/user/leaveGame', { game_id }), {
             onError: (error) => {
                 if (error instanceof AxiosError) {
                     toast.error(error.response?.data.message, { id: toastId });
@@ -18,6 +18,7 @@ export default function LeaveGame({ id }: { id: number }) {
             onSuccess: (data) => {
                 toast.success('Vous avez quitté la partie!', { id: toastId });
                 queryClient.invalidateQueries({ queryKey: ['games'] });
+                queryClient.invalidateQueries({ queryKey: ['user'] });
             }
         }
     )

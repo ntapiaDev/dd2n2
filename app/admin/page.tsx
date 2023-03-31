@@ -1,4 +1,4 @@
-export default async function Admin() {
+export default function Admin() {
   return (
     <main>
       <h1>Admin page</h1>

@@ -11,7 +11,7 @@ type Props = {
   session: Session;
 }
 
-export default function Providers({ children, session }: Props) {
+export default function ClientProviders({ children, session }: Props) {
   const [queryClient] = React.useState(() => new QueryClient());
 
   return (

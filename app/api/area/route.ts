@@ -6,12 +6,19 @@ import { AreaType, Biomes } from '@/app/types/Area';
 import { getDistance } from '@/app/utils/tools';
 
 export async function GET(request: Request) {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) return new Response('Vous devez être identifié pour accéder à cette page!', { status: 401 });
-    const user = session.user;
-    if (!user.game_id) return new Response('Vous devez rejoindre une partie pour accéder à cette page!', { status: 401 });
-
     const url = new URL(request.url);
+    const id = url.searchParams.get('game_id');
+
+    let game_id: number;
+
+    if (!id) {
+        const session = await getServerSession(authOptions);
+        if (!session?.user) return new Response('Vous devez être identifié pour accéder à cette page!', { status: 401 });
+        const user = session.user;
+        if (!user.game_id) return new Response('Vous devez rejoindre une partie pour accéder à cette page!', { status: 401 });
+        game_id = user.game_id;
+    } else game_id = parseInt(id);
+
     const x = url.searchParams.get('x');
     const y = url.searchParams.get('y');
 
@@ -19,7 +26,7 @@ export async function GET(request: Request) {
         try {
             const response = await prisma.area.findFirst({
                 where: {
-                    game_id: user.game_id,
+                    game_id,
                     x: parseInt(x),
                     y: parseInt(y)
                 },
@@ -45,7 +52,7 @@ export async function GET(request: Request) {
     try {
         const response = await prisma.area.findMany({
             where: {
-                game_id: user.game_id
+                game_id
             },
             orderBy: [
                 {
@@ -66,7 +73,7 @@ export async function POST(request: Request) {
     const { game_id } = await request.json();
     const size = 9;
     const encampment = { x: Math.ceil(size/2), y: Math.ceil(size/2) };
-    const areas: AreaType[] = [];
+    const areas: Omit<AreaType, 'id'>[] = [];
 
     const keys = Object.keys(Biomes);
     let biome = keys[Math.floor(Math.random() * keys.length)] as keyof typeof Biomes;
@@ -90,12 +97,12 @@ export async function POST(request: Request) {
                 }
             }
             const level = Math.ceil((getDistance(j, i, encampment) / 2) + (-1 + Math.random() * 2));
-            const area: AreaType = {
-                game_id,
+            const area: Omit<AreaType, 'id'> = {
                 x: j,
                 y: i,
                 biome,
-                level: (j === encampment.x && i === encampment.y ? 0 : level > 0 ? level : 1)
+                level: (j === encampment.x && i === encampment.y ? 0 : level > 0 ? level : 1),
+                game_id
             };
             areas.push(area);
         }

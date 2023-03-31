@@ -1,10 +1,14 @@
+import { AreaType } from "./Area";
+
 export type LootType = { loot: string, rarity: string };
 export type ZombieType = { attack: number, defense: number };
 
 export type CellType = {
-    area_id: number,
+    id: number,
     x: number,
     y: number,
     loot?: LootType,
-    zombie?: ZombieType
+    zombie?: ZombieType,
+    area?: AreaType,
+    area_id: number
 };

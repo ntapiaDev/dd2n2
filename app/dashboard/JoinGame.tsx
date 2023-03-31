@@ -14,7 +14,7 @@ export default function JoinGame({ id }: { id: number }) {
     const [toastId, setToastId] = useState('');
 
     const { mutate } = useMutation(
-        async (game_id: number) => await axios.patch('/api/user/joinGame/', { game_id }), {
+        async (game_id: number) => await axios.patch('/api/user/joinGame', { game_id }), {
             onError: (error) => {
                 if (error instanceof AxiosError) {
                     toast.error(error.response?.data.message, { id: toastId })
@@ -23,6 +23,7 @@ export default function JoinGame({ id }: { id: number }) {
             onSuccess: (data) => {
                 toast.success('Vous avez rejoint la partie!', { id: toastId });
                 queryClient.invalidateQueries({ queryKey: ['games'] });
+                queryClient.invalidateQueries({ queryKey: ['user'] });
                 queryClient.prefetchQuery({ queryKey: ['map'], queryFn: getMap });
             }
         }
